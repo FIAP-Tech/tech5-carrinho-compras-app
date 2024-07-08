@@ -1,0 +1,63 @@
+server:
+    port: ${PORT:8083}
+
+spring:
+    application:
+        name: pedidos-app
+    datasource:
+        url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/db_pedidos}
+        username: ${DATASOURCE_USERNAME:postgres}
+        password: ${DATASOURCE_PASSWORD:teste123}
+        driver-class-name: org.postgresql.Driver
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        hibernate:
+            ddl-auto: update  # Use 'update' to automatically update schema (create or update tables)
+        properties:
+            hibernate:
+                jdbc:
+                    time_zone: UTC  # Set JDBC time zone to UTC (optional, adjust as needed)
+        show-sql: false  # Enable SQL logging (optional, for debugging)
+        generate-ddl: false  # Generate DDL from entity models (optional, for schema creation)
+        open-in-view: false  # Disable Open Session in View (OSIV) to prevent lazy loading issues
+
+    security:
+        oauth2:
+            resourceserver:
+                jwt:
+                    issuer-uri: http://localhost:9000
+                    jwk-set-uri: http://localhost:9000/oauth2/jwks
+
+logging:
+    level:
+        org.springframework.security: TRACE
+
+api:
+    cliente:
+        endpoint: ${API_CLIENTE_ENDPOINT:http://localhost:8082/api/clientes}
+        retry:
+            max-tentativas: 3
+            duracao: 5
+    produto:
+        endpoint: ${API_PRODUTO_ENDPOINT:http://localhost:8080/api/produtos}
+        retry:
+            max-tentativas: 3
+            duracao: 5
+
+
+aws:
+    region: ${AWS_REGION:us-east-1}
+    credentials:
+        client-id: ${AWS_CLIENT_ID:1111111111}
+        client-secret: ${AWS_CLIENT_SECRET:2222222222}
+    sqs:
+        endpoint:
+            envia-emails: ${AWS_SQS_ENDPOINT_ENVIA_EMAILS:http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/envia-emails}
+            processa-pedidos: ${AWS_SQS_ENDPOINT_PROCESSA_PEDIDOS:http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/processa_pedidos}
+
+messages:
+    error:
+        pedido-nao-encontrado: "Pedido não foi encontrado"
+        cliente-nao-encontrado: "Cliente não foi encontrado"
+        produto-nao-possui-estoque: "Produto não possui estoque: "
+        produto-nao-encontrado: "Produto não foi encontrado id: "
