@@ -14,7 +14,7 @@ public class SwaggerConfig {
     public OpenAPI openAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Microsserviço de Pedidos")
+                        .title("Microsserviço de Carrinho de Compras")
                         .description("API desenvolvida para controlar todo o gerenciamento de pedidos")
                         .version("1.0.0")
                         .termsOfService("Termo de uso: Open Source")

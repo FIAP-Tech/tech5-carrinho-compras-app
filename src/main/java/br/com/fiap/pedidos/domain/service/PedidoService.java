@@ -1,6 +1,6 @@
 package br.com.fiap.pedidos.domain.service;
 
-import br.com.fiap.pedidos.api.exceptionhandler.ClienteNaoEncontradoException;
+import br.com.fiap.pedidos.api.exceptionhandler.UsuarioNaoEncontradoException;
 import br.com.fiap.pedidos.api.exceptionhandler.ProdutoNaoEncontradoException;
 import br.com.fiap.pedidos.api.model.*;
 import br.com.fiap.pedidos.config.MessageConfig;
@@ -16,15 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @Service
 @AllArgsConstructor
 public class PedidoService {
-
-
-    private static final Logger logger = Logger.getLogger(PedidoService.class.getName());
-
 
     private final PedidoRepository pedidoRepository;
 
@@ -32,28 +27,9 @@ public class PedidoService {
 
     private final MessageConfig messageConfig;
 
-    private final SQSService sqsService;
-
-    private final ClienteService clienteService;
+    private final UsuarioService usuarioService;
 
     private final ProdutoService produtoService;
-
-    private void enviarEmailPedidoRecebido(Pedido pedido, ClienteDto cliente) {
-        var mensagemEmailDto = new MensagemEmailDto();
-        mensagemEmailDto.setEmailDestinatario(cliente.getEmail());
-        mensagemEmailDto.setAssunto("Pedido recebido com Sucesso");
-        mensagemEmailDto.criarCorpoEmailPedido(pedido, cliente.getNome());
-
-        sqsService.enviarMensagemFilaEmail(mensagemEmailDto);
-    }
-
-    private void enviarPedidoParaProcessamento(Pedido pedido, ClienteDto cliente) {
-        var pedidoProcessaDto = new PedidoProcessaDto();
-        modelMapper.map(pedido, pedidoProcessaDto);
-        modelMapper.map(cliente, pedidoProcessaDto);
-
-        sqsService.enviarMensagemFilaPedidos(pedidoProcessaDto);
-    }
 
     private void atualizarStatus(Pedido pedido) {
         pedido.setStatus(Status.VERIFICANDO_PAGAMENTO);
@@ -65,26 +41,23 @@ public class PedidoService {
                 .forEach(pedidoProduto -> produtoService.atualizarEstoqueProduto(pedidoProduto.getId().getIdProduto(), pedidoProduto.getQuantidade()).subscribe());
     }
 
-    private void processarPedido(Pedido pedido, ClienteDto cliente) {
+    private void processarPedido(Pedido pedido, UsuarioDto cliente) {
         atualizarEstoqueProduto(pedido);
-        enviarEmailPedidoRecebido(pedido, cliente);
-        enviarPedidoParaProcessamento(pedido, cliente);
         atualizarStatus(pedido);
     }
 
     public PedidoDto add(PedidoDto pedidoDto) {
         var pedido = modelMapper.map(pedidoDto, Pedido.class);
 
-        Optional<ClienteDto> clienteDto = clienteService.getClienteById(pedido.getIdCliente());
+        Optional<UsuarioDto> usuarioDto = usuarioService.getClienteById(pedido.getIdUsuario());
 
-        if(clienteDto.isEmpty()) {
-            throw new ClienteNaoEncontradoException(messageConfig.getClienteNaoEncontrado());
+        if(usuarioDto.isEmpty()) {
+            throw new UsuarioNaoEncontradoException(messageConfig.getUsuarioNaoEncontrado());
         }
 
         pedido.getPedidoProdutos()
                 .forEach(pedidoProduto -> {
                     Optional<ProdutoDto> produtoDto = produtoService.getProdutoById(pedidoProduto.getId().getIdProduto());
-                    logger.info("teste ricardo log: " + produtoDto);
                     if(produtoDto.isPresent()){
                         ProdutoDto produto = produtoDto.get();
                         if(produto.getEstoque() >= pedidoProduto.getQuantidade()) {
@@ -99,7 +72,7 @@ public class PedidoService {
                 });
 
         pedido = pedidoRepository.save(pedido);
-        processarPedido(pedido, clienteDto.get());
+        processarPedido(pedido, usuarioDto.get());
 
         return modelMapper.map(pedido, PedidoDto.class);
     }
@@ -122,14 +95,7 @@ public class PedidoService {
                 .toList();
     }
 
-    public Optional<Pedido> atualizaStatusPedido(Long orderId, Status novoStatus) {
-        Optional<Pedido> pedidoOptional = pedidoRepository.findById(orderId);
-        if (pedidoOptional.isPresent()) {
-            Pedido pedido = pedidoOptional.get();
-            pedido.setStatus(novoStatus);
-            pedidoRepository.save(pedido);
-            return Optional.of(pedido);
-        }
-        return Optional.empty();
+    public void delete(Long id) {
+        pedidoRepository.deleteById(id);
     }
 }

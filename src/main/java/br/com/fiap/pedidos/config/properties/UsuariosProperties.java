@@ -6,14 +6,14 @@ import org.springframework.context.annotation.Configuration;
 
 @Getter
 @Configuration
-public class ClienteProperties {
+public class UsuariosProperties {
 
-    @Value("${api.cliente.endpoint}")
+    @Value("${api.usuario.endpoint}")
     private String endpoint;
 
-    @Value("${api.cliente.retry.max-tentativas}")
+    @Value("${api.usuario.retry.max-tentativas}")
     private Integer maxTentativas;
 
-    @Value("${api.cliente.retry.duracao}")
+    @Value("${api.usuario.retry.duracao}")
     private Integer duracao;
 }

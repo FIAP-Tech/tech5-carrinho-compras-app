@@ -25,7 +25,7 @@ public class Pedido {
     private Long idPedido;
 
     @Column(nullable = false)
-    private Long idCliente;
+    private Long idUsuario;
 
     @Column
     @JsonFormat(pattern="dd/MM/yyyy HH:mm:ss")

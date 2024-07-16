@@ -1,14 +1,13 @@
 package br.com.fiap.pedidos.service;
 
-import br.com.fiap.pedidos.api.exceptionhandler.ClienteNaoEncontradoException;
-import br.com.fiap.pedidos.api.model.ClienteDto;
+import br.com.fiap.pedidos.api.exceptionhandler.UsuarioNaoEncontradoException;
+import br.com.fiap.pedidos.api.model.UsuarioDto;
 import br.com.fiap.pedidos.api.model.PedidoDto;
 import br.com.fiap.pedidos.config.MessageConfig;
 import br.com.fiap.pedidos.domain.model.Pedido;
 import br.com.fiap.pedidos.domain.repository.PedidoRepository;
-import br.com.fiap.pedidos.domain.service.ClienteService;
+import br.com.fiap.pedidos.domain.service.UsuarioService;
 import br.com.fiap.pedidos.domain.service.PedidoService;
-import br.com.fiap.pedidos.domain.service.SQSService;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -38,7 +37,7 @@ public class PedidoServiceTest {
     private SQSService sqsService;
 
     @Mock
-    private ClienteService clienteService;
+    private UsuarioService clienteService;
 
     @InjectMocks
     private PedidoService pedidoService;
@@ -60,7 +59,7 @@ public class PedidoServiceTest {
         void deveCriarPedidoComSucesso() {
             PedidoDto pedidoDto = new PedidoDto();
             Pedido pedidoMock = new Pedido();
-            ClienteDto clienteDto = new ClienteDto();
+            UsuarioDto clienteDto = new UsuarioDto();
 
             when(modelMapper.map(pedidoDto, Pedido.class)).thenReturn(pedidoMock);
             when(clienteService.getClienteById(anyLong())).thenReturn(Optional.of(clienteDto));
@@ -75,7 +74,7 @@ public class PedidoServiceTest {
         void deveLancarExceptionAoTentaBuscarClienteInexistente() {
             PedidoDto pedidoDto = new PedidoDto();
 
-            when(clienteService.getClienteById(anyLong())).thenThrow(new ClienteNaoEncontradoException("Cliente não foi encontrado"));
+            when(clienteService.getClienteById(anyLong())).thenThrow(new UsuarioNaoEncontradoException("Cliente não foi encontrado"));
 
             //assertThrows(ClienteNaoEncontradoException.class, () -> pedidoService.add(pedidoDto));
         }

@@ -1,11 +1,11 @@
 server:
-    port: ${PORT:8083}
+    port: ${PORT:8082}
 
 spring:
     application:
-        name: pedidos-app
+        name: carrinho-compras-app
     datasource:
-        url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/db_pedidos}
+        url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/db_compras}
         username: ${DATASOURCE_USERNAME:postgres}
         password: ${DATASOURCE_PASSWORD:teste123}
         driver-class-name: org.postgresql.Driver
@@ -21,20 +21,12 @@ spring:
         generate-ddl: false  # Generate DDL from entity models (optional, for schema creation)
         open-in-view: false  # Disable Open Session in View (OSIV) to prevent lazy loading issues
 
-    security:
-        oauth2:
-            resourceserver:
-                jwt:
-                    issuer-uri: http://localhost:9000
-                    jwk-set-uri: http://localhost:9000/oauth2/jwks
-
-logging:
-    level:
-        org.springframework.security: TRACE
+jwt:
+    secret: 357638792F423F4428472B4B6250655368566D597133743677397A2443264629
 
 api:
-    cliente:
-        endpoint: ${API_CLIENTE_ENDPOINT:http://localhost:8082/api/clientes}
+    usuario:
+        endpoint: ${API_USUARIO_ENDPOINT:http://localhost:8082/api/usuarios}
         retry:
             max-tentativas: 3
             duracao: 5
@@ -44,20 +36,9 @@ api:
             max-tentativas: 3
             duracao: 5
 
-
-aws:
-    region: ${AWS_REGION:us-east-1}
-    credentials:
-        client-id: ${AWS_CLIENT_ID:1111111111}
-        client-secret: ${AWS_CLIENT_SECRET:2222222222}
-    sqs:
-        endpoint:
-            envia-emails: ${AWS_SQS_ENDPOINT_ENVIA_EMAILS:http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/envia-emails}
-            processa-pedidos: ${AWS_SQS_ENDPOINT_PROCESSA_PEDIDOS:http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/processa_pedidos}
-
 messages:
     error:
         pedido-nao-encontrado: "Pedido não foi encontrado"
-        cliente-nao-encontrado: "Cliente não foi encontrado"
+        usuario-nao-encontrado: "Usuário não foi encontrado"
         produto-nao-possui-estoque: "Produto não possui estoque: "
         produto-nao-encontrado: "Produto não foi encontrado id: "

@@ -28,8 +28,8 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(status).body(this.errorMessage);
     }
 
-    @ExceptionHandler(ClienteNaoEncontradoException.class)
-    public ResponseEntity<ErrorMessage> clienteNaoEncontrado(ClienteNaoEncontradoException e, HttpServletRequest request){
+    @ExceptionHandler(UsuarioNaoEncontradoException.class)
+    public ResponseEntity<ErrorMessage> clienteNaoEncontrado(UsuarioNaoEncontradoException e, HttpServletRequest request){
         var status = HttpStatus.NOT_FOUND;
 
         errorMessage.setTimestamp(LocalDateTime.now());
