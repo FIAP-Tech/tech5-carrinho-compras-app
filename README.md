@@ -1,3 +1,3 @@
-# pedidos-app
-Microsserviço de Pedidos
-# pedidos-app
+# carrinho-compras-app
+Microsserviço de Carrinho de Compras
+# carrinho-compras-app
