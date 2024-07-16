@@ -1,6 +1,5 @@
 package br.com.fiap.pedidos.domain.model;
 
-import br.com.fiap.pedidos.domain.enums.FormaPagamento;
 import br.com.fiap.pedidos.domain.enums.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -37,12 +36,6 @@ public class Pedido {
 
     @Column
     private BigDecimal totalPedido;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private FormaPagamento formaPagamento;
-
-    private String validadeFormaPagamentoCartao;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<PedidoProduto> pedidoProdutos;

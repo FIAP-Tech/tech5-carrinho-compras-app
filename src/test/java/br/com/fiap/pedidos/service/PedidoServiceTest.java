@@ -34,9 +34,6 @@ public class PedidoServiceTest {
     private MessageConfig messageConfig;
 
     @Mock
-    private SQSService sqsService;
-
-    @Mock
     private UsuarioService clienteService;
 
     @InjectMocks

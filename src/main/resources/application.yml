@@ -26,12 +26,12 @@ jwt:
 
 api:
     usuario:
-        endpoint: ${API_USUARIO_ENDPOINT:http://localhost:8082/api/usuarios}
+        endpoint: ${API_USUARIO_ENDPOINT:http://localhost:8080/api/usuarios}
         retry:
             max-tentativas: 3
             duracao: 5
     produto:
-        endpoint: ${API_PRODUTO_ENDPOINT:http://localhost:8080/api/produtos}
+        endpoint: ${API_PRODUTO_ENDPOINT:http://localhost:8081/api/produtos}
         retry:
             max-tentativas: 3
             duracao: 5

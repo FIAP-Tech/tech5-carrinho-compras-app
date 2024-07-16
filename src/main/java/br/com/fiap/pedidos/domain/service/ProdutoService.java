@@ -18,8 +18,5 @@ public class ProdutoService {
         return client.getProdutoById(produtoId).block();
     }
 
-    public Mono<Optional<String>> atualizarEstoqueProduto(Long produtoId, Integer quantidadeVendida) {
-        return client.atualizarEstoqueProduto(produtoId, quantidadeVendida);
-    }
 }
 

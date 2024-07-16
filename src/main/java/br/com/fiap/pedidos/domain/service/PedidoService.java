@@ -36,16 +36,6 @@ public class PedidoService {
         pedidoRepository.save(pedido);
     }
 
-    private void atualizarEstoqueProduto(Pedido pedido) {
-        pedido.getPedidoProdutos()
-                .forEach(pedidoProduto -> produtoService.atualizarEstoqueProduto(pedidoProduto.getId().getIdProduto(), pedidoProduto.getQuantidade()).subscribe());
-    }
-
-    private void processarPedido(Pedido pedido, UsuarioDto cliente) {
-        atualizarEstoqueProduto(pedido);
-        atualizarStatus(pedido);
-    }
-
     public PedidoDto add(PedidoDto pedidoDto) {
         var pedido = modelMapper.map(pedidoDto, Pedido.class);
 
@@ -72,7 +62,6 @@ public class PedidoService {
                 });
 
         pedido = pedidoRepository.save(pedido);
-        processarPedido(pedido, usuarioDto.get());
 
         return modelMapper.map(pedido, PedidoDto.class);
     }

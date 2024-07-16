@@ -14,7 +14,7 @@ public class UsuarioService {
     private final UsuarioClient client;
 
     public Optional<UsuarioDto> getClienteById(Long clienteId) {
-        return client.getClienteById(clienteId).block();
+        return client.getUsuarioById(clienteId).block();
     }
 }
 
