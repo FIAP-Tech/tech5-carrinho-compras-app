@@ -5,5 +5,5 @@ ENV DATASOURCE_PASSWORD DATASOURCE_PASSWORD
 ENV API_USUARIO_ENDPOINT API_USUARIO_ENDPOINT
 ENV API_PRODUTO_ENDPOINT API_PRODUTO_ENDPOINT
 EXPOSE 8082
-COPY target/*.jar carrinho-compras-app-0.0.1-SNAPSHOT.jar
-ENTRYPOINT ["java","-jar","/carrinho-compras-app-0.0.1-SNAPSHOT.jar"]
+COPY target/*.jar carrinho-compras-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java","-jar","/carrinho-compras-0.0.1-SNAPSHOT.jar"]
