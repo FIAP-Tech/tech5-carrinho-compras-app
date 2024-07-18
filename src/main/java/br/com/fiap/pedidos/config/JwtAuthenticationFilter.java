@@ -56,10 +56,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private Claims getClaimsFromToken(String token) {
-        Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
+        return Jwts.parser()
+                .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
     }
